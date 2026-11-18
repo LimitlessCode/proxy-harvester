@@ -19,6 +19,8 @@ Only proxies passing ALL gates are written to the output file.
 
 ## Quick Start
 
+Requires a stable Rust toolchain (2021 edition).
+
 ```bash
 # Build
 cargo build --release
@@ -120,8 +122,45 @@ pubproxy.com ──────┘                    │              │      
                                                     headers?"
 ```
 
-## Related
+## Panel
 
-- [`proxy-harvester-py`](https://github.com/LimitlessCode/proxy-harvester-py) —
-  the Python harvester the `panel/` crate spawns to scrape. The panel reads
-  `proxies.db`; that process is the only writer.
+`panel/` is a read-only terminal UI (`ratatui` + `crossterm`) over the
+harvester's `proxies.db`. It opens the database as `file:...?mode=ro`, so it is
+safe to run against a database a harvest is actively writing — it never inserts,
+never migrates, never touches the WAL.
+
+```bash
+cargo run -p proxy-panel -- --db path/to/proxies.db
+```
+
+| key | action |
+|---|---|
+| `1`-`5` | sort by type / anonymity / latency / country / score |
+| `r` | reverse sort direction |
+| `t` / `a` | cycle type / anonymity filter |
+| `/` | incremental search on IP |
+| `s` / `c` | start-or-cancel a harvest / re-check the selected proxy |
+| `d` / `e` | delete selected (prune re-scan) / export selected |
+| `+` / `-` | raise / lower the scrape limit |
+| `j` / `k` | move selection |
+| `Enter` / `l` / `g` / `q` | detail overlay / log pane / reload / quit |
+
+Full key list and sort semantics: [`panel/README.md`](panel/README.md).
+
+## Companion harvester
+
+The panel's `--harvester` flag spawns a separate Python harvester that owns
+`proxies.db` — the panel is read-only, that process is the only writer. It is
+kept in a private repository and is not required for the CLI in `src/`.
+
+## Docs
+
+| doc | what |
+|---|---|
+| [`ROADMAP.md`](ROADMAP.md) | planned phases and design rationale |
+| [`IMPLEMENTATION-PARAMETERS.md`](IMPLEMENTATION-PARAMETERS.md) | thresholds, constants, phase parameters |
+| [`IMPLEMENTATION-SUBMITTED.md`](IMPLEMENTATION-SUBMITTED.md) | build log — what shipped and how each part works |
+| [`panel/CONTRACT.md`](panel/CONTRACT.md) | panel ↔ harvester contract |
+| [`panel/EXPORT_QUIRK.md`](panel/EXPORT_QUIRK.md) | export dialog notes and quirks |
+| [`proxy-panel-waybar.md`](proxy-panel-waybar.md) | waybar module + panel launcher |
+| [`DEPLOY.md`](DEPLOY.md) | deployment notes |

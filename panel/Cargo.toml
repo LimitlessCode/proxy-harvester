@@ -3,6 +3,10 @@ name = "proxy-panel"
 version = "0.1.0"
 edition = "2021"
 description = "Read-only terminal panel for the Python harvester's proxies.db"
+repository = "https://github.com/LimitlessCode/proxy-harvester"
+readme = "README.md"
+keywords = ["proxy", "tui", "ratatui", "terminal", "sqlite"]
+categories = ["command-line-utilities"]
 
 [dependencies]
 anyhow = "1"

@@ -6,6 +6,6 @@ contact_links:
   - name: panel — keys, sort contract
     url: https://github.com/LimitlessCode/proxy-harvester/blob/master/panel/README.md
     about: Key bindings and sort semantics for the terminal panel.
-  - name: proxy-harvester-py
-    url: https://github.com/LimitlessCode/proxy-harvester-py
-    about: The Python harvester the panel spawns. Database and SORT_CONTRACT changes belong there.
+  - name: panel — CONTRACT.md
+    url: https://github.com/LimitlessCode/proxy-harvester/blob/master/panel/CONTRACT.md
+    about: The panel ↔ harvester contract, including sort semantics and read-only guarantees.

@@ -32,6 +32,10 @@ inserts, never touches the WAL.
 | `/` | incremental search on IP |
 | `s` | start / cancel a harvest |
 | `c` | re-check the selected proxy (`--recheck`, the harvester writes, the panel stays read-only) |
+| `d` | delete the selected proxy (spawns a prune re-scan — again, the panel itself never writes) |
+| `e` | export the selection (text / JSON / CSV) |
+| `+` / `-` | raise / lower the scrape limit |
+| `j` / `k` | move the selection down / up |
 | `l` | toggle the log pane |
 | `Enter` | detail overlay for the selected row |
 | `g` | reload from the database |
@@ -42,8 +46,8 @@ shows the keys. The terminal is restored on exit and on panic.
 
 ## Sort semantics
 
-Identical to `/home/user/proxy-harvester-py/docs/SORT_CONTRACT.md`, which is
-frozen and shared with the Python API:
+Identical to the frozen sort contract shared with the Python API
+(see [`CONTRACT.md`](CONTRACT.md)):
 
 - `anonymity` is **ranked** (`elite` > `anonymous` > `transparent` > unknown),
   not compared as a string — otherwise `anonymous` would sort before `elite`.

@@ -3,6 +3,11 @@ name = "proxy-harvester"
 version = "0.1.0"
 edition = "2021"
 description = "High-quality proxy harvester with elite-only filtering"
+repository = "https://github.com/LimitlessCode/proxy-harvester"
+readme = "README.md"
+homepage = "https://github.com/LimitlessCode/proxy-harvester"
+keywords = ["proxy", "proxy-scraper", "socks5", "anonymity", "network"]
+categories = ["command-line-utilities", "network-programming"]
 
 [workspace]
 members = ["panel"]
