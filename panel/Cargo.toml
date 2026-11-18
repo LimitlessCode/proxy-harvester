@@ -1,0 +1,19 @@
+[package]
+name = "proxy-panel"
+version = "0.1.0"
+edition = "2021"
+description = "Read-only terminal panel for the Python harvester's proxies.db"
+
+[dependencies]
+anyhow = "1"
+chrono = "0.4"
+clap = { version = "4", features = ["derive"] }
+crossterm = "0.29"
+ratatui = "0.30"
+rusqlite = { version = "0.42", default-features = false, features = ["bundled", "functions"] }
+serde_json = "1"
+libc = "0.2"
+
+[[bin]]
+name = "proxy-panel"
+path = "src/main.rs"

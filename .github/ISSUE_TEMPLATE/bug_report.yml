@@ -1,0 +1,104 @@
+name: Bug report
+description: Something in the harvester or the panel is broken or behaves unexpectedly.
+title: "[bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. The fields below map to the things that usually
+        decide whether a bad proxy is our bug or the upstream source's, so the
+        more of them you fill in, the faster this can be closed.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which part is misbehaving?
+      options:
+        - harvester CLI (src/) — scraping, validation, geo filter, output
+        - panel (panel/) — ratatui TUI, sorting, filters, export
+        - harvest spawned from the panel (--harvester <script>)
+        - build / dependencies
+        - docs
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you see, and what did you expect instead?
+      placeholder: |
+        Harvest returned 0 proxies for --country US even though ~400 were scraped.
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Exact command line, or keystrokes if this is the panel.
+      render: shell
+      placeholder: |
+        ./target/release/proxy-harvester --country US --checks 5 -v
+    validations:
+      required: true
+
+  - type: dropdown
+    id: source
+    attributes:
+      label: Proxy source
+      description: Only for scraping/volume bugs — skip if it happens with every source.
+      options:
+        - not source-related
+        - proxyscrape.com
+        - free-proxy-list.net
+        - geonode.com
+        - pubproxy.com
+        - all sources
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: "`proxy-harvester --version` / `proxy-panel --version`, or `git rev-parse --short HEAD`."
+      placeholder: proxy-harvester 0.1.0 (a1b2c3d)
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: |
+        Harvester: re-run with `-v`. Panel: press `l` to open the log pane and
+        copy it. **Redact anything you don't want public** — logs and proxy dumps
+        contain third-party IPs.
+      render: shell
+      placeholder: |
+        2026-01-01T00:00:00Z DEBUG scraped 412 from geonode.com
+        2026-01-01T00:00:01Z WARN  12 proxies failed anonymity gate
+    validations:
+      required: false
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS + arch, `rustc --version`, and for panel issues the terminal and `$TERM`.
+      placeholder: Linux x86_64, rustc 1.83.0, kitty, xterm-256color
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and this isn't already reported.
+          required: true
+        - label: I removed credentials and any proxy lists I don't want to publish.
+          required: true

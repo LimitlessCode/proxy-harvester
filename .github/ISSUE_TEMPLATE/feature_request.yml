@@ -1,0 +1,59 @@
+name: Feature request
+description: Suggest a new capability, a new proxy source, or a change to existing behaviour.
+title: "[feat]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        One rule for this repo: a proposal is judged on whether it improves
+        **verified** proxy yield or makes the panel easier to read — not on how
+        many lines it adds.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - harvester CLI (src/) — scraping, validation, geo filter, output
+        - panel (panel/) — ratatui TUI, sorting, filters, export
+        - new proxy source
+        - build / dependencies
+        - docs
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What can't you do today? Concrete beats abstract.
+      placeholder: |
+        Harvesting for inbound-to-China work needs city-level granularity, but
+        --country only filters at country level, so I re-sort by hand.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What should it do? If it's a new source, include the URL and whether an API/JSON feed exists.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Anything you tried, or why the obvious approach is wrong here.
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Screenshots, sample output, links to similar features elsewhere.
+    validations:
+      required: false
