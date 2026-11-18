@@ -7,6 +7,7 @@ repository = "https://github.com/LimitlessCode/proxy-harvester"
 readme = "README.md"
 keywords = ["proxy", "tui", "ratatui", "terminal", "sqlite"]
 categories = ["command-line-utilities"]
+license = "MIT"
 
 [dependencies]
 anyhow = "1"

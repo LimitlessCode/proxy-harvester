@@ -8,6 +8,7 @@ readme = "README.md"
 homepage = "https://github.com/LimitlessCode/proxy-harvester"
 keywords = ["proxy", "proxy-scraper", "socks5", "anonymity", "network"]
 categories = ["command-line-utilities", "network-programming"]
+license = "MIT"
 
 [workspace]
 members = ["panel"]

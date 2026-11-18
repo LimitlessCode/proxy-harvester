@@ -33,7 +33,7 @@ inserts, never touches the WAL.
 | `s` | start / cancel a harvest |
 | `c` | re-check the selected proxy (`--recheck`, the harvester writes, the panel stays read-only) |
 | `d` | delete the selected proxy (spawns a prune re-scan — again, the panel itself never writes) |
-| `e` | export the selection (text / JSON / CSV) |
+| `e` | export the selection — **stub: prompts for a path, writes nothing** |
 | `+` / `-` | raise / lower the scrape limit |
 | `j` / `k` | move the selection down / up |
 | `l` | toggle the log pane |

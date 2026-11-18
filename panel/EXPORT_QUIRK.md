@@ -1,4 +1,10 @@
-# Export Dialog Implementation - Quick Plan
+# Export Dialog - Design Sketch (NOT IMPLEMENTED)
+
+> **Status: not implemented.** Export (`e`) currently opens a path prompt,
+> toasts `Exporting to: <path>`, and writes no file — see
+> `panel/src/main.rs` (`// In a real implementation, we would write the data
+> here`). This document is the plan for building it, not a description of
+> shipped behaviour.
 
 ## Requirements
 - Modal popup for export options

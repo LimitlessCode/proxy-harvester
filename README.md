@@ -1,5 +1,7 @@
 # Proxy Harvester
 
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 High-quality proxy harvester with elite-only filtering. Scrapes public proxy lists, validates through multi-stage quality gates, and outputs only verified elite proxies.
 
 ## Quality Gates
@@ -47,6 +49,8 @@ Options:
       --concurrency <N>        Max concurrent checks [default: 100]
       --checks <N>             Consistency checks per proxy [default: 3]
       --max-latency <MS>       Max acceptable latency in ms [default: 5000]
+      --limit <N>              Max raw proxies entering validation [default: 500]
+      --anonymity <LEVEL>      Minimum anonymity: elite, anonymous, transparent [default: elite]
       --country <XX>           Only keep proxies from this country (ISO 2-letter)
       --exclude-country <X>    Reject proxies from these countries (comma-separated)
   -o, --output <FILE>          Output file for verified proxies (JSON) [default: elite-proxies.json]
@@ -140,12 +144,17 @@ cargo run -p proxy-panel -- --db path/to/proxies.db
 | `t` / `a` | cycle type / anonymity filter |
 | `/` | incremental search on IP |
 | `s` / `c` | start-or-cancel a harvest / re-check the selected proxy |
-| `d` / `e` | delete selected (prune re-scan) / export selected |
+| `d` / `e` | delete selected (prune re-scan) / export selected — **`e` is a stub, see below** |
 | `+` / `-` | raise / lower the scrape limit |
 | `j` / `k` | move selection |
 | `Enter` / `l` / `g` / `q` | detail overlay / log pane / reload / quit |
 
 Full key list and sort semantics: [`panel/README.md`](panel/README.md).
+
+> **Unimplemented:** export (`e`) prompts for a path and writes no file, and
+> there is no dead-proxies-only view or multi-select. See
+> [`IMPLEMENTATION-SUBMITTED.md`](IMPLEMENTATION-SUBMITTED.md) for the honest
+> status list.
 
 ## Companion harvester
 
@@ -159,8 +168,12 @@ kept in a private repository and is not required for the CLI in `src/`.
 |---|---|
 | [`ROADMAP.md`](ROADMAP.md) | planned phases and design rationale |
 | [`IMPLEMENTATION-PARAMETERS.md`](IMPLEMENTATION-PARAMETERS.md) | thresholds, constants, phase parameters |
-| [`IMPLEMENTATION-SUBMITTED.md`](IMPLEMENTATION-SUBMITTED.md) | build log — what shipped and how each part works |
+| [`IMPLEMENTATION-SUBMITTED.md`](IMPLEMENTATION-SUBMITTED.md) | status — what works, what is stubbed |
 | [`panel/CONTRACT.md`](panel/CONTRACT.md) | panel ↔ harvester contract |
-| [`panel/EXPORT_QUIRK.md`](panel/EXPORT_QUIRK.md) | export dialog notes and quirks |
+| [`panel/EXPORT_QUIRK.md`](panel/EXPORT_QUIRK.md) | export dialog design sketch (not implemented) |
 | [`proxy-panel-waybar.md`](proxy-panel-waybar.md) | waybar module + panel launcher |
-| [`DEPLOY.md`](DEPLOY.md) | deployment notes |
+| [`DEPLOY.md`](DEPLOY.md) | build, run, systemd unit, troubleshooting |
+
+## License
+
+MIT — see [`LICENSE`](LICENSE).

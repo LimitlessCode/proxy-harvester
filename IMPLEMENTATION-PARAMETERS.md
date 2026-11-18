@@ -1,5 +1,11 @@
 # Proxy Panel Implementation Plan
 
+> **Status: not implemented.** The two features described here — multi-select
+> parallel recheck and a dead-proxy tab with a `ViewMode` enum — do not exist in
+> `panel/src/`. Selection is a single row index, and `d` deletes rather than
+> filtering. See [`IMPLEMENTATION-SUBMITTED.md`](IMPLEMENTATION-SUBMITTED.md) for
+> the current state. This document is the design record for building them.
+
 ## Goals
 
 1. **Intelligent Recheck Selection** (`c` key)

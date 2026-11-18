@@ -1,50 +1,93 @@
-# Deployment Guide
+# Deployment
 
-## Waybar Integration
+Two binaries, both built from this workspace:
 
-### Current Status
-Waybar is running. The proxy panel has been compiled with new features:
-- Dead proxy tab accessible via `d` key
-- CSV export via `E` key
+| binary | what |
+|---|---|
+| `proxy-harvester` | the CLI that scrapes and validates; writes `elite-proxies.json` |
+| `proxy-panel` | the read-only TUI over the companion harvester's `proxies.db` |
 
-### Starting Waybar (Manual)
-Run these commands in order:
+## Build
 
 ```bash
-# 1. Build the new proxy-panel binary
-cd /home/user/proxy-harvester
+git clone https://github.com/LimitlessCode/proxy-harvester.git
+cd proxy-harvester
+cargo build --release            # both binaries land in target/release/
+```
+
+## Run the CLI
+
+```bash
+# one-shot
+./target/release/proxy-harvester -o elite-proxies.json
+
+# continuous — re-harvest every 10 minutes
+./target/release/proxy-harvester -i 600 -o elite-proxies.json
+```
+
+### Keep it running (systemd user unit)
+
+```ini
+# ~/.config/systemd/user/proxy-harvester.service
+[Unit]
+Description=Proxy harvester (continuous)
+After=network-online.target
+
+[Service]
+WorkingDirectory=%h/proxy-harvester
+ExecStart=%h/proxy-harvester/target/release/proxy-harvester -i 600 -o %h/proxy-harvester/elite-proxies.json
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
+```
+
+```bash
+systemctl --user daemon-reload
+systemctl --user enable --now proxy-harvester
+loginctl enable-linger "$USER"    # keep it running while logged out
+```
+
+## Run the panel
+
+```bash
 cargo build -p proxy-panel --release
-
-# 2. Reload waybar immediately
-killall -SIGTERM waybar
-sleep 1
-waybar &
+./target/release/proxy-panel --db path/to/proxies.db
 ```
 
-### Automatic Waybar Reload
-A helper script has been created at `/tmp/restart_waybar.sh`
+The panel needs a `proxies.db` produced by the companion Python harvester — it
+does not create or migrate one. It opens the file read-only, so running it
+against a database that is being written is safe.
 
-Run: `/tmp/restart_waybar.sh`
+Launch it in a scratch terminal from a compositor keybind, e.g.:
 
-### Verifying Waybar is Running
-Check once it's synced:
 ```bash
-pgrep -x waybar && echo "Waybar is running ✓"
+kitty --class proxy-panel --title proxy-panel -e ./target/release/proxy-panel --db path/to/proxies.db
 ```
 
-## Features Available
+Waybar status module: see [`proxy-panel-waybar.md`](proxy-panel-waybar.md).
 
-Once waybar is synced:
-- **d** key - Toggle dead proxy tab (shows only dead proxies)
-- **E** key - Export selected proxies as CSV
-- **R** key - Recheck all shown proxies (existing)
-- **c** key - Recheck selected proxy (existing)
+## Verify
 
-## Export Locations
-Exports go to: `/home/user/proxy-harvester-py/exports/`
-Default format: `proxies-YYYYMMDD-HHMMSS.csv`
+```bash
+./target/release/proxy-harvester --version
+./target/release/proxy-panel --version
+cargo test --workspace          # 50 tests: panel unit + sort contract
+```
 
 ## Troubleshooting
-- If waybar doesn't come back: Log out and back into Hyprland
-- Check logs: `journalctl --user -u waybar`
-- Verify binary: `/home/user/proxy-harvester/target/release/proxy-panel --version`
+
+- **Terminal left in a weird state** (no echo, no line wrap) after a crash:
+  `reset` or `stty sane`. The panel restores the terminal on normal exit and on
+  panic, but not if the process is `SIGKILL`ed.
+- **`database is locked`**: the panel's handle is read-only with
+  `busy_timeout=5000`; a long write from the harvester child can still exceed
+  it. Press `g` to reload rather than retrying by hand.
+- **Orphaned Python harvester**: the panel kills its child on exit (`SIGTERM`,
+  then `SIGKILL`). If one survives a hard kill of the panel,
+  `pkill -f 'harvester.py --no-web'`.
+
+## Note
+
+There is no CI and no published release binary — `target/release/` is all there
+is. Building on the target machine is the supported path.
